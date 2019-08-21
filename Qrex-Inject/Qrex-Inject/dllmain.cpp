@@ -7,6 +7,16 @@ ILuaInterface* qrex = NULL;
 
 HMODULE module = NULL;
 
+int destroyThread()
+{
+	FreeLibraryAndExitThread(module, 0);
+}
+
+int initDestroy()
+{
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)destroyThread, NULL, NULL, NULL);
+	return 0;
+}
 
 int getClientState() {
 	HMODULE LuaShared_modhandle = GetModuleHandle("lua_shared.dll");
@@ -35,9 +45,10 @@ int getClientState() {
 int Main(lua_State * state)
 {
 	getClientState();
-	// qrex->RunString("RunString", "", "print('fuckyou')", true, true);
-
+	qrex->RunString("RunString", "", "print('fuckyou')", true, true);
 	// Place code above ^
+
+	initDestroy();
 	return 0;
 }
 
